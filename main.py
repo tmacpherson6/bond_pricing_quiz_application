@@ -40,9 +40,11 @@ def question_generator(df: pd.DataFrame):
         if random_column == "pv_with_coupon":
             question = (
                 f"\n{row['question_id']} - You want to buy a "
-                f"corporate bond with a face value of ${row['face_value']:.2f}. "
-                f"There are still {row['years_to_maturity']} years to maturity. "
-                f"The current market interest rate is {row['discount_rate']:.2%}. "
+                f"corporate bond with a face value of "
+                f"${row['face_value']:.2f}. There are still "
+                f"{row['years_to_maturity']} years to maturity. "
+                f"The current market interest rate is "
+                f"{row['discount_rate']:.2%}. "
                 f"The bond yields {row['coupon_payment_schedule']} coupons per "
                 f"year  and has an annual interest rate of "
                 f"{row['coupon_rate']:.2%}. What is the current 'Net Present "
@@ -55,16 +57,19 @@ def question_generator(df: pd.DataFrame):
                 f"${row['face_value']:.2f}.There are still "
                 f"{row['years_to_maturity']} years to maturity. Assume the "
                 f"corporate bond is a no-coupon bond and has an annual "
-                f"interest rate of {row['coupon_rate']:.2%}. What is the "
+                f"interest rate of {row['coupon_rate']:.2%}. "
+                f"The current market interest rate is "
+                f"{row['discount_rate']:.2%}.What is the "
                 f"current 'Net Present Value' of the corporate bond?"
             )
         elif random_column == "face_value":
             question = (
                 f"\n{row['question_id']} - A bond has a present value "
                 f"of ${row['pv_with_coupon']:.2f} and yields "
-                f"{row['coupon_payment_schedule']} coupons per year. It matures "
-                f"in {row['years_to_maturity']} years and has an annual interest "
-                f"rate of {row['coupon_rate']:.2%}. What is the estimated 'face "
+                f"{row['coupon_payment_schedule']} coupons per year. "
+                f"It matures in {row['years_to_maturity']} years and has an " f"annual interest rate of {row['coupon_rate']:.2%}. "
+                f"The current market interest rate is "
+                f"{row['discount_rate']:.2%}. What is the estimated 'face "
                 f"value' of this bond?"
             )
         elif random_column == "coupon_rate":
@@ -73,7 +78,9 @@ def question_generator(df: pd.DataFrame):
                 f"${row['pv_with_coupon']:.2f} today and has face value of "
                 f"${row['face_value']}. It matures in {row['years_to_maturity']} "
                 f"years and pays {row['coupon_payment_schedule']} coupons per "
-                f"year. What is the bond's 'annual yield'?"
+                f"year. The current market interest rate is "
+                f"{row['discount_rate']:.2%}. What is the bond's "
+                f"'annual yield'?"
             )
 
         yield question.strip(), np.round(answer, 2), row
