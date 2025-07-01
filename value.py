@@ -3,12 +3,11 @@ This is a python script that will calculate the present and future value of corp
 """
 
 import pandas as pd
+from interest import discount_rate
 
 
 # Let's start by defining a function.
-def present_value_no_coupon(
-    face_value: float, discount_rate: float, duration: float = 1.0
-) -> float:
+def present_value_no_coupon(face_value: float, duration: float = 1.0) -> float:
     """
     This function will take a bond and calculate the discounted present value
 
@@ -21,9 +20,10 @@ def present_value_no_coupon(
     retuns:
     present_value: Float of the current present value of the bond
     """
+    discounted_rate = discount_rate(duration)
 
     # Present value calculation
-    pres_val = face_value / ((1 + discount_rate) ** duration)
+    pres_val = face_value / ((1 + discounted_rate) ** duration)
 
     return pres_val
 
