@@ -87,12 +87,12 @@ def present_value_with_coupon(
         # calculate the pressent value for each period
         if coupons == time:
             # If it's the last period, we add the face value
-            present_value += (coupon_value + face_value) / (
-                1 + discount_rate_per_period
-            ) ** coupons
+            present_value += (coupon_value + face_value) * np.exp(
+                -discount_rate_per_period * coupons
+            )
         else:
             # Otherwise, we just add the coupon value
-            present_value += coupon_value / (1 + discount_rate_per_period) ** coupons
+            present_value += coupon_value * np.exp(-discount_rate_per_period * coupons)
 
     return present_value
 
