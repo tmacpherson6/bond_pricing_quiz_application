@@ -45,6 +45,22 @@ def compounding_interest(continuous_rate: float, compounding_frequency: float) -
     return discrete_rate
 
 
+def dicount_rate(time: float):
+    """
+    This function is used to calculate a variable discount rate that mimics a zero rate bond. This will allow us to properly discount cash flows for bonds that pay coupons at different times.
+
+    Parameters:
+    time: float - the time in years until the cash flow is received
+
+    returns:
+    float - the discount rate for the given length of time
+    """
+
+    discount_rate = 0.15 + (0.55 - 0.15) * (1 - np.exp(-0.2 * time))
+
+    return discount_rate
+
+
 def add_continuous_interest(df: pd.DataFrame):
     """
     This is a function that will calculate the continuous interest rate and add
