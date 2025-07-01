@@ -1,0 +1,4 @@
+name: pipeline
+channels:
+  - defaults
+prefix: C:\Users\tmacp\anaconda3\envs\pipeline
