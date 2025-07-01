@@ -59,7 +59,7 @@ def add_continuous_interest(df: pd.DataFrame):
 
     df["continuous_rate"] = df.apply(
         lambda row: continuous_interest_calculation(
-            row["discount_rate"], row["coupon_payment_schedule"]
+            row["coupon_rate"], row["coupon_payment_schedule"]
         ),
         axis=1,
     )
