@@ -39,16 +39,7 @@ def create_bond_data(seed: int = 6, n_bonds: int = 15) -> pd.DataFrame:
             "years_to_maturity": np.random.randint(1, 30, size=n_bonds),
             "coupon_payment_schedule": np.random.choice(coupon_payment, size=n_bonds),
             "coupon_rate": np.round(np.random.uniform(0.01, 0.10, size=n_bonds), 4),
-            "discount_rate": np.random.uniform(0.04, 0.06),
         }
-    )
-
-    # Calculate the present and future values
-    df["present_value"] = np.round(
-        df["face_value"] / (1 + df["discount_rate"]) ** df["years_to_maturity"], 2
-    )
-    df["future_value"] = np.round(
-        df["present_value"] * (1 + df["discount_rate"]) ** df["years_to_maturity"], 2
     )
 
     return df
