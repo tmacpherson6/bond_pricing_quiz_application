@@ -1,5 +1,8 @@
 """
-This is a python script that contains functions to calculate continuous interest as well as discrete interest for compounding questions. Not all functions are currently used in the pipeline, but they are available for futures use as the practice database is expanded.
+This is a python script that contains functions to calculate continuous
+interest as well as discrete interest for compounding questions. Not all
+functions are currently used in the pipeline, but they are available for
+futures use as the practice database is expanded.
 """
 
 import numpy as np
@@ -45,9 +48,11 @@ def compounding_interest(continuous_rate: float, compounding_frequency: float) -
     return discrete_rate
 
 
-def dicount_rate(time: float):
+def discount_rate(time: float):
     """
-    This function is used to calculate a variable discount rate that mimics a zero rate bond. This will allow us to properly discount cash flows for bonds that pay coupons at different times.
+    This function is used to calculate a variable discount rate that mimics a
+    zero rate bond. This will allow us to properly discount cash flows for
+    bonds that pay coupons at different times.
 
     Parameters:
     time: float - the time in years until the cash flow is received
@@ -56,9 +61,9 @@ def dicount_rate(time: float):
     float - the discount rate for the given length of time
     """
 
-    discount_rate = 0.15 + (0.55 - 0.15) * (1 - np.exp(-0.2 * time))
+    discounted_rate = 0.15 + ((0.2) * (1 - np.exp(-0.2 * time)))
 
-    return discount_rate
+    return discounted_rate
 
 
 def add_continuous_interest(df: pd.DataFrame):

@@ -1,5 +1,9 @@
 """
-This is a python script that will generate a .CSV file containing data for corporate or govenment bonds. It should contain all pertinent information so that we can calculate the present and future value of the bonds. The data will be generated randomly so that we can practice our present and future value calculations.
+This is a python script that will generate a .CSV file containing data for
+corporate or govenment bonds. It should contain all pertinent information so
+that we can calculate the present and future value of the bonds. The data will
+be generated randomly so that we can practice our present and future value
+calculations.
 """
 
 import numpy as np

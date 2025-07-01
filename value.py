@@ -1,7 +1,11 @@
 """
-This is a python script that will calculate the present and future value of corporate or government bonds. It will take into account whether the bond has coupons or not, and will return the present value based on the discount rate and time to maturity.
+This is a python script that will calculate the present and future value of
+corporate or government bonds. It will take into account whether the bond has
+coupons or not, and will return the present value based on the discount rate
+and time to maturity.
 """
 
+import numpy as np
 import pandas as pd
 from interest import discount_rate
 
@@ -17,9 +21,10 @@ def present_value_no_coupon(face_value: float, duration: float = 1.0) -> float:
     duration: The maturity of the bond in years
     coupons: Number of coupons the bond pays
 
-    retuns:
+    Retuns:
     present_value: Float of the current present value of the bond
     """
+    # Find the discount rate for the given duration
     discounted_rate = discount_rate(duration)
 
     # Present value calculation
@@ -30,7 +35,6 @@ def present_value_no_coupon(face_value: float, duration: float = 1.0) -> float:
 
 def future_value_no_coupon(
     present_value: float,
-    discount_rate: float,
     duration: float = 1.0,
 ) -> float:
     """
@@ -39,22 +43,21 @@ def future_value_no_coupon(
 
     Parameters:
     present_value: The we are currently paying for the bond
-    dicount_rate: Annual interest rate
     duration: The maturity of the bond in years
     coupons: Number of coupons the bond pays
 
     retuns:
     future_value: Float of the expected return of the corporate/government bond
     """
-
+    # Find the discount rate for the given duration
+    discounted_rate = discount_rate(duration)
     # Future value calculations
-    future_value = present_value * ((1 + discount_rate) ** duration)
+    future_value = present_value * ((1 + discounted_rate) ** duration)
     return future_value
 
 
 def present_value_with_coupon(
     face_value: float,
-    discount_rate: float,
     coupon_rate: float,
     coupon_schedule: int = 1,
     time: float = 1.0,
@@ -68,33 +71,30 @@ def present_value_with_coupon(
     coupon_schedule: Number of coupon payments per year
     time: The maturity of the bond in years
 
-    retuns:
+    Retuns:
     present_value: Float of the current present value of the bond
     """
+    # We need to create a list of the periods
+    coupon_maturities = np.arange(1, time * coupon_schedule + 1) / coupon_schedule
 
-    # Compute per-period rates
-    discount_rate_per_period = discount_rate / coupon_schedule
-    coupon_rate_per_period = coupon_rate / coupon_schedule
+    present_value = 0.0
 
-    # Coupon payment amount
-    coupon_payment = face_value * coupon_rate_per_period
+    for coupons in coupon_maturities:
+        # Calculate the discount rate for each period
+        discount_rate_per_period = discount_rate(coupons)
+        # Calculate the coupon value for each period
+        coupon_value = face_value * (coupon_rate / coupon_schedule)
+        # calculate the pressent value for each period
+        if coupons == time:
+            # If it's the last period, we add the face value
+            present_value += (coupon_value + face_value) / (
+                1 + discount_rate_per_period
+            ) ** coupons
+        else:
+            # Otherwise, we just add the coupon value
+            present_value += coupon_value / (1 + discount_rate_per_period) ** coupons
 
-    # Total number of coupon payments
-    periods = int(time * coupon_schedule)
-
-    # Present value of coupon payments (annuity)
-    coupon_pv = sum(
-        coupon_payment / ((1 + discount_rate_per_period) ** t)
-        for t in range(1, periods + 1)
-    )
-
-    # Present value of face value (lump sum)
-    face_pv = face_value / (1 + discount_rate_per_period) ** periods
-
-    # Total present value
-    total_pv = coupon_pv + face_pv
-
-    return total_pv
+    return present_value
 
 
 def add_pv_no_coupon(df: pd.DataFrame):
@@ -109,7 +109,7 @@ def add_pv_no_coupon(df: pd.DataFrame):
     """
     df["pv_no_coupon"] = df.apply(
         lambda row: present_value_no_coupon(
-            row["face_value"], row["discount_rate"], row["years_to_maturity"]
+            row["face_value"], row["years_to_maturity"]
         ),
         axis=1,
     )
@@ -129,7 +129,6 @@ def add_pv_with_coupon(df: pd.DataFrame):
     df["pv_with_coupon"] = df.apply(
         lambda row: present_value_with_coupon(
             row["face_value"],
-            row["discount_rate"],
             row["coupon_rate"],
             row["coupon_payment_schedule"],
             row["years_to_maturity"],
